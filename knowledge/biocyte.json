@@ -1,0 +1,136 @@
+{
+  "business_name": "Biocyte Romania",
+  "language": "Română",
+  "contact_email": "contact@biocyte.ro",
+  "contact_phone": "+40 721 000 000",
+  "website": "https://www.biocyte.ro",
+  "system_instructions": "Ești Bibi, asistentul virtual al Biocyte Romania. Ești expert în suplimente alimentare și nutriție. Ajuți clienții să găsească produsul potrivit pentru nevoile lor. Fii empatic, profesionist și orientat spre soluții. Când recomanzi un produs, explică întotdeauna DE CE este potrivit pentru problema clientului. Dacă clientul pare hotărât să cumpere, oferă-i link-ul paginii de produs sau îndeamnă-l să adauge în coș.",
+
+  "products": [
+    {
+      "id": "vitamina-c-1000",
+      "name": "Vitamina C 1000mg cu Zinc",
+      "category": "vitamine",
+      "price": "49 RON / 60 capsule",
+      "description": "Formula premium cu vitamina C 1000mg și zinc pentru imunitate maximă. Vitamina C este eliberată treptat pe parcursul a 8 ore.",
+      "benefits": [
+        "Întărește sistemul imunitar",
+        "Reduce oboseala și epuizarea",
+        "Protecție antioxidantă",
+        "Susține producția de colagen"
+      ],
+      "recommended_for": ["imunitate slabă", "răceli frecvente", "oboseală", "convalescență"],
+      "dosage": "1 capsulă pe zi, după masă",
+      "url": "https://www.biocyte.ro/vitamina-c-zinc"
+    },
+    {
+      "id": "colagen-marin",
+      "name": "Colagen Marin Hidrolizat 10000mg",
+      "category": "colagen",
+      "price": "89 RON / 30 plicuri",
+      "description": "Colagen marin de tip I și III, extras din pești de apă sărată. Fiecare plic conține 10000mg colagen hidrolizat cu vitamina C pentru absorbție optimă.",
+      "benefits": [
+        "Îmbunătățește elasticitatea pielii",
+        "Reduce ridurile fine",
+        "Întărește unghiile și părul",
+        "Susține sănătatea articulațiilor"
+      ],
+      "recommended_for": ["anti-aging", "piele lăsată", "articulații dureroase", "păr fragil", "unghii casante"],
+      "dosage": "1 plic pe zi dizolvat în apă sau suc, pe stomacul gol dimineața",
+      "url": "https://www.biocyte.ro/colagen-marin"
+    },
+    {
+      "id": "probiotic-complex",
+      "name": "Probiotic Complex 50 Miliarde CFU",
+      "category": "probiotice",
+      "price": "79 RON / 30 capsule",
+      "description": "Complex avansat cu 12 tulpini de bacterii benefice și 50 miliarde CFU per capsulă. Include prebiotice naturale din inulină pentru hrănirea bacteriilor benefice.",
+      "benefits": [
+        "Reechilibrează flora intestinală",
+        "Reduce balonarea și disconfortul digestiv",
+        "Susține imunitatea (70% din imunitate vine din intestin)",
+        "Ajută în recuperarea după antibiotice"
+      ],
+      "recommended_for": ["probleme digestive", "balonare", "după antibiotice", "sindrom de intestin iritabil", "imunitate slabă"],
+      "dosage": "1 capsulă pe zi, dimineața pe stomacul gol",
+      "url": "https://www.biocyte.ro/probiotic-complex"
+    },
+    {
+      "id": "omega3-triple",
+      "name": "Omega 3 Triple Strength 1500mg",
+      "category": "omega3",
+      "price": "69 RON / 60 capsule",
+      "description": "Ulei de pește purificat molecular cu concentrație triplă: 900mg EPA + 600mg DHA per capsulă. Fără miros de pește, certificat IFOS 5 stele.",
+      "benefits": [
+        "Susține sănătatea cardiovasculară",
+        "Îmbunătățește funcția cognitivă și memoria",
+        "Reduce inflamația articulară",
+        "Susține sănătatea ochilor",
+        "Echilibrează colesterolul"
+      ],
+      "recommended_for": ["sănătate inimă", "colesterol", "memorie", "concentrare", "articulații", "depresie ușoară"],
+      "dosage": "1 capsulă de 2 ori pe zi, în timpul meselor",
+      "url": "https://www.biocyte.ro/omega3-triple"
+    },
+    {
+      "id": "whey-protein",
+      "name": "Whey Protein Isolate 90% - Ciocolată",
+      "category": "proteine",
+      "price": "149 RON / 900g (30 porții)",
+      "description": "Proteină din zer izolată cu 90% conținut proteic, fără zahăr adăugat, fără lactoză. Ideală pentru recuperare musculară și menținerea masei musculare. Disponibilă și în aromele Vanilie și Căpșuni.",
+      "benefits": [
+        "27g proteină per porție",
+        "Recuperare musculară rapidă post-antrenament",
+        "Fără zahăr și fără lactoză",
+        "Se dizolvă ușor, gust excelent",
+        "Susține pierderea în greutate prin sațietate"
+      ],
+      "recommended_for": ["sport", "masă musculară", "slăbit", "recuperare post-antrenament", "dietă proteică", "intoleranță lactoză"],
+      "dosage": "1 shake (30g) imediat după antrenament sau dimineața la micul dejun",
+      "url": "https://www.biocyte.ro/whey-protein-isolate"
+    }
+  ],
+
+  "faq": [
+    {
+      "question": "Cât durează livrarea?",
+      "answer": "Livrăm în 24-48 de ore lucrătoare prin curier rapid. Comenzile plasate înainte de ora 14:00 sunt expediate în aceeași zi. Livrare gratuită pentru comenzi peste 200 RON."
+    },
+    {
+      "question": "Care este politica de retur?",
+      "answer": "Acceptăm returnarea produselor în termen de 30 de zile de la primire, dacă ambalajul este intact și produsul nu a fost deschis. Trimiteți un email la contact@biocyte.ro și vă ghidăm prin proces."
+    },
+    {
+      "question": "Produsele sunt originale / autentice?",
+      "answer": "Da, toate produsele Biocyte sunt originale, importate direct de la producător și înregistrate la ANSVSA. Oferim certificate de calitate pentru fiecare lot."
+    },
+    {
+      "question": "Pot lua mai multe suplimente împreună?",
+      "answer": "În general da, suplimentele noastre pot fi combinate în siguranță. Totuși, recomandăm consultarea unui medic sau farmacist dacă urmați tratamente medicamentoase. Puteți să ne descrieți situația și vă oferim o recomandare personalizată."
+    },
+    {
+      "question": "Acceptați plata la livrare?",
+      "answer": "Da! Acceptăm plata la livrare (ramburs), card online prin Stripe, transfer bancar și plata în rate prin Klarna (fără dobândă pentru 3 rate)."
+    },
+    {
+      "question": "Produsele sunt potrivite pentru vegetarieni / vegani?",
+      "answer": "Colagenul Marin și Omega 3 conțin ingrediente de origine animală (pește). Vitamina C cu Zinc și Probioticul Complex sunt potrivite pentru vegetarieni. Niciun produs nu conține gelatină porcină."
+    },
+    {
+      "question": "Cât timp durează să văd rezultate?",
+      "answer": "Depinde de produs: Vitamina C - efecte imedune vizibile în 2-3 săptămâni. Colagenul - primele îmbunătățiri ale pielii după 4-6 săptămâni de utilizare zilnică. Probioticele - ameliorarea digestivă în 1-2 săptămâni. Omega 3 - beneficii cardiovasculare pe termen lung, după 2-3 luni."
+    },
+    {
+      "question": "Oferiți reduceri sau abonamente?",
+      "answer": "Da! Abonamentul lunar (livrare automatică) oferă 15% reducere permanent. La prima comandă folosiți codul BIOCYTE10 pentru 10% reducere. Avem și un program de loialitate: la fiecare 500 RON cheltuiți primiți 50 RON bonus."
+    },
+    {
+      "question": "Produsele au avize / sunt certificate?",
+      "answer": "Toate produsele sunt notificate la Ministerul Sănătății din România, produse în facilități GMP-certificate din Franța și testate de laboratoare independente. Suntem transparenți cu ingredientele - fiecare produs are fișa tehnică disponibilă pe site."
+    },
+    {
+      "question": "Cum pot contacta un specialist pentru o recomandare personalizată?",
+      "answer": "Puteți: (1) Scrie pe WhatsApp la +40 721 000 000, (2) Trimite email la contact@biocyte.ro, (3) Folosi formularul de pe site la biocyte.ro/contact. Echipa noastră de nutriționiști răspunde în maxim 2 ore în zilele lucrătoare."
+    }
+  ]
+}

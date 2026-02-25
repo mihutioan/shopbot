@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShopBot Admin Dashboard</title>
+  <style>
+    /* =========================================================
+       Reset & Base
+    ========================================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    /* =========================================================
+       Sidebar
+    ========================================================= */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 230px;
+      height: 100vh;
+      background: #1e293b;
+      color: white;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      padding: 22px 20px;
+      font-size: 20px;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sidebar-logo span { font-size: 26px; }
+    .sidebar-nav { padding: 16px 0; flex: 1; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 20px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      transition: all 0.15s;
+    }
+    .nav-item:hover, .nav-item.active {
+      background: rgba(255,255,255,0.08);
+      border-left-color: #3b82f6;
+      color: white;
+    }
+    .nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* =========================================================
+       Main Content
+    ========================================================= */
+    .main {
+      margin-left: 230px;
+      padding: 24px;
+      min-height: 100vh;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .topbar h1 { font-size: 22px; font-weight: 700; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .badge {
+      background: #dcfce7;
+      color: #15803d;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: #3b82f6; color: white; }
+    .btn-outline { background: white; color: #374151; border: 1px solid #e5e7eb; }
+
+    /* =========================================================
+       Stats Cards
+    ========================================================= */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+    }
+    .stat-label {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-change {
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .stat-change.up { color: #16a34a; }
+    .stat-change.down { color: #dc2626; }
+    .stat-icon {
+      float: right;
+      font-size: 28px;
+      margin-top: -4px;
+    }
+
+    /* =========================================================
+       Charts (fake bar chart using CSS)
+    ========================================================= */
+    .chart-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+      margin-bottom: 28px;
+    }
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .chart-title { font-size: 15px; font-weight: 600; }
+    .chart-subtitle { font-size: 12px; color: #64748b; margin-top: 2px; }
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      height: 120px;
+    }
+    .bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .bar {
+      width: 100%;
+      background: #3b82f6;
+      border-radius: 4px 4px 0 0;
+      transition: opacity 0.2s;
+      min-height: 4px;
+    }
+    .bar:hover { opacity: 0.75; }
+    .bar-label { font-size: 11px; color: #94a3b8; }
+
+    /* =========================================================
+       Conversations Table
+    ========================================================= */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .section-title { font-size: 16px; font-weight: 600; }
+    .table-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { border-bottom: 1px solid #e5e7eb; }
+    th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: #f8fafc;
+    }
+    td {
+      padding: 13px 16px;
+      font-size: 13px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fafc; }
+    .status-pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .status-active { background: #dcfce7; color: #15803d; }
+    .status-ended  { background: #f1f5f9; color: #64748b; }
+    .client-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    /* =========================================================
+       API Key Config Panel
+    ========================================================= */
+    .config-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+      margin-bottom: 28px;
+    }
+    .config-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .config-row:last-child { margin-bottom: 0; }
+    .config-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      min-width: 160px;
+    }
+    .config-input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: monospace;
+      color: #374151;
+      background: #f9fafb;
+    }
+    .config-input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      background: white;
+    }
+    #live-stats-output {
+      font-family: monospace;
+      font-size: 13px;
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 14px;
+      margin-top: 14px;
+      white-space: pre-wrap;
+      border: 1px solid #e5e7eb;
+      min-height: 60px;
+      color: #374151;
+    }
+
+    /* =========================================================
+       Embed Code Box
+    ========================================================= */
+    .embed-box {
+      background: #1e293b;
+      color: #a5f3fc;
+      border-radius: 10px;
+      padding: 16px;
+      font-family: monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre;
+      position: relative;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.2); }
+
+    /* =========================================================
+       Responsive
+    ========================================================= */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     SIDEBAR
+============================================================ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span>🤖</span> ShopBot
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-item active">
+      <span class="icon">📊</span> Dashboard
+    </div>
+    <div class="nav-item">
+      <span class="icon">💬</span> Conversations
+    </div>
+    <div class="nav-item">
+      <span class="icon">🏪</span> Clients
+    </div>
+    <div class="nav-item">
+      <span class="icon">⚙️</span> Settings
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    ShopBot v1.0.0<br>
+    &copy; 2024 Your Company
+  </div>
+</aside>
+
+<!-- ============================================================
+     MAIN CONTENT
+============================================================ -->
+<main class="main">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div>
+      <h1>Dashboard</h1>
+      <p style="color:#64748b;font-size:13px;margin-top:3px;">February 2024 · All clients</p>
+    </div>
+    <div class="topbar-right">
+      <span class="badge">● API Online</span>
+      <button class="btn btn-outline" onclick="fetchLiveStats()">↻ Refresh Stats</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       STATS CARDS
+  ============================================================ -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">💬</div>
+      <div class="stat-label">Total Conversations</div>
+      <div class="stat-value">247</div>
+      <div class="stat-change up">▲ 18% vs last month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📩</div>
+      <div class="stat-label">Total Messages</div>
+      <div class="stat-value">1,832</div>
+      <div class="stat-change up">▲ 22% vs last month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-label">Est. API Cost</div>
+      <div class="stat-value">$4.21</div>
+      <div class="stat-change down">▲ $0.80 vs last month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🏪</div>
+      <div class="stat-label">Active Clients</div>
+      <div class="stat-value">1</div>
+      <div class="stat-change up">Biocyte Romania</div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MESSAGES PER DAY CHART (last 7 days)
+  ============================================================ -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">Messages per Day</div>
+        <div class="chart-subtitle">Last 7 days · Biocyte Romania</div>
+      </div>
+      <select class="config-input" style="max-width:140px;padding:6px 10px;">
+        <option>Last 7 days</option>
+        <option>Last 30 days</option>
+      </select>
+    </div>
+    <!-- Simple CSS bar chart (mock data) -->
+    <div class="bar-chart" id="barChart">
+      <!-- Bars are generated by JavaScript below -->
+    </div>
+  </div>
+
+  <!-- ============================================================
+       RECENT CONVERSATIONS TABLE
+  ============================================================ -->
+  <div class="section-header">
+    <div class="section-title">Recent Conversations</div>
+    <button class="btn btn-outline" style="font-size:12px;">Export CSV</button>
+  </div>
+
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Session ID</th>
+          <th>Client</th>
+          <th>Messages</th>
+          <th>Last Activity</th>
+          <th>Status</th>
+          <th>Preview</th>
+        </tr>
+      </thead>
+      <tbody id="conversationsTable">
+        <!-- Rows are generated by JavaScript below -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============================================================
+       LIVE API STATS (connects to real backend)
+  ============================================================ -->
+  <div class="section-header" style="margin-top:8px;">
+    <div class="section-title">Live API Stats</div>
+  </div>
+  <div class="config-card">
+    <p style="font-size:13px;color:#64748b;margin-bottom:14px;">
+      Connect to your running ShopBot backend to see real-time stats. Fill in your API URL and key below.
+    </p>
+    <div class="config-row">
+      <span class="config-label">Backend URL</span>
+      <input type="text" class="config-input" id="apiUrl" value="http://localhost:8000"
+             placeholder="https://your-app.railway.app" />
+    </div>
+    <div class="config-row">
+      <span class="config-label">API Key</span>
+      <input type="password" class="config-input" id="apiKey" placeholder="your-secret-api-key" />
+    </div>
+    <button class="btn btn-primary" onclick="fetchLiveStats()" style="margin-top:10px;">
+      Fetch Live Stats
+    </button>
+    <div id="live-stats-output">Click "Fetch Live Stats" to load data from your backend...</div>
+  </div>
+
+  <!-- ============================================================
+       EMBED CODE GENERATOR
+  ============================================================ -->
+  <div class="section-header">
+    <div class="section-title">Embed Code Generator</div>
+  </div>
+  <div class="config-card">
+    <p style="font-size:13px;color:#64748b;margin-bottom:16px;">
+      Configure the widget and copy the embed code to paste into the client's website.
+    </p>
+    <div class="config-row">
+      <span class="config-label">Client ID</span>
+      <input type="text" class="config-input" id="gen-client-id" value="biocyte" oninput="updateEmbedCode()" />
+    </div>
+    <div class="config-row">
+      <span class="config-label">Bot Name</span>
+      <input type="text" class="config-input" id="gen-bot-name" value="Bibi" oninput="updateEmbedCode()" />
+    </div>
+    <div class="config-row">
+      <span class="config-label">Primary Color</span>
+      <input type="color" id="gen-color" value="#2E7D32" oninput="updateEmbedCode()"
+             style="width:48px;height:36px;border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;padding:2px;" />
+      <input type="text" class="config-input" id="gen-color-hex" value="#2E7D32"
+             oninput="syncColor()" style="max-width:100px;" />
+    </div>
+    <div class="config-row">
+      <span class="config-label">Welcome Message</span>
+      <input type="text" class="config-input" id="gen-welcome"
+             value="Bună! Sunt Bibi, asistentul tău virtual. Cu ce te pot ajuta?" oninput="updateEmbedCode()" />
+    </div>
+
+    <div style="position:relative;margin-top:16px;">
+      <div class="embed-box" id="embedCode"></div>
+      <button class="copy-btn" onclick="copyEmbedCode()">Copy</button>
+    </div>
+  </div>
+
+</main>
+
+<!-- ============================================================
+     JAVASCRIPT - Mock data + Live fetch + Embed code generator
+============================================================ -->
+<script>
+  // ============================================================
+  // Mock data for the conversations table
+  // ============================================================
+  const MOCK_CONVERSATIONS = [
+    { id: "sb_x7k9m_1", client: "biocyte", messages: 8, time: "2 min ago",  status: "active", preview: "Ce vitamine recomandati pentru energie?" },
+    { id: "sb_a2p4q_2", client: "biocyte", messages: 5, time: "14 min ago", status: "active", preview: "Aveti colagen marin? Care e diferenta..." },
+    { id: "sb_m3n8r_3", client: "biocyte", messages: 12, time: "1 hr ago",  status: "ended",  preview: "Cat dureaza livrarea la Cluj?" },
+    { id: "sb_z6v1t_4", client: "biocyte", messages: 3,  time: "2 hrs ago", status: "ended",  preview: "Vreau sa stiu mai multe despre Omega 3" },
+    { id: "sb_b9k2w_5", client: "biocyte", messages: 7,  time: "3 hrs ago", status: "ended",  preview: "Am intoleranță la lactoză, ce proteina..." },
+    { id: "sb_f4h7j_6", client: "biocyte", messages: 4,  time: "5 hrs ago", status: "ended",  preview: "Oferiti discount pentru comenzi mari?" },
+    { id: "sb_p1c5e_7", client: "biocyte", messages: 9,  time: "Yesterday", status: "ended",  preview: "Probioticul e bun dupa tratament cu antib..." },
+  ];
+
+  // Render the conversations table
+  function renderTable() {
+    const tbody = document.getElementById("conversationsTable");
+    tbody.innerHTML = MOCK_CONVERSATIONS.map(conv => `
+      <tr>
+        <td style="font-family:monospace;font-size:12px;color:#94a3b8;">${conv.id}</td>
+        <td><span class="client-badge">${conv.client}</span></td>
+        <td style="font-weight:600;">${conv.messages}</td>
+        <td style="color:#64748b;">${conv.time}</td>
+        <td><span class="status-pill status-${conv.status}">${conv.status}</span></td>
+        <td style="color:#64748b;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"
+            title="${conv.preview}">${conv.preview}</td>
+      </tr>
+    `).join("");
+  }
+
+  // ============================================================
+  // Bar chart (last 7 days mock data)
+  // ============================================================
+  const CHART_DATA = [
+    { day: "Mon", value: 45 },
+    { day: "Tue", value: 72 },
+    { day: "Wed", value: 58 },
+    { day: "Thu", value: 93 },
+    { day: "Fri", value: 88 },
+    { day: "Sat", value: 31 },
+    { day: "Sun", value: 19 },
+  ];
+
+  function renderChart() {
+    const chart = document.getElementById("barChart");
+    const maxVal = Math.max(...CHART_DATA.map(d => d.value));
+    chart.innerHTML = CHART_DATA.map(d => {
+      const heightPct = Math.round((d.value / maxVal) * 100);
+      return `
+        <div class="bar-group">
+          <div style="font-size:11px;color:#94a3b8;margin-bottom:4px;">${d.value}</div>
+          <div class="bar" style="height:${heightPct}%;" title="${d.day}: ${d.value} messages"></div>
+          <div class="bar-label">${d.day}</div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  // ============================================================
+  // Fetch live stats from the real ShopBot backend
+  // ============================================================
+  async function fetchLiveStats() {
+    const apiUrl = document.getElementById("apiUrl").value.trim().replace(/\/$/, "");
+    const apiKey = document.getElementById("apiKey").value.trim();
+    const output = document.getElementById("live-stats-output");
+
+    output.textContent = "Loading...";
+
+    try {
+      // First check health endpoint
+      const healthRes = await fetch(`${apiUrl}/health`);
+      const health = await healthRes.json();
+
+      // Then fetch stats (requires API key)
+      const headers = { "Content-Type": "application/json" };
+      if (apiKey) headers["X-API-Key"] = apiKey;
+
+      const statsRes = await fetch(`${apiUrl}/stats`, { headers });
+
+      if (!statsRes.ok) {
+        output.textContent = `Error ${statsRes.status}: ${await statsRes.text()}`;
+        return;
+      }
+
+      const stats = await statsRes.json();
+
+      output.textContent = JSON.stringify({
+        health: health,
+        stats: stats
+      }, null, 2);
+
+    } catch (err) {
+      output.textContent = `Connection failed: ${err.message}\n\nMake sure your backend is running at:\n${apiUrl}`;
+    }
+  }
+
+  // ============================================================
+  // Embed code generator
+  // ============================================================
+  function updateEmbedCode() {
+    const apiUrl = document.getElementById("apiUrl").value.trim().replace(/\/$/, "") || "https://your-app.railway.app";
+    const clientId = document.getElementById("gen-client-id").value;
+    const botName = document.getElementById("gen-bot-name").value;
+    const color = document.getElementById("gen-color").value;
+    const welcome = document.getElementById("gen-welcome").value;
+    const apiKey = document.getElementById("apiKey").value || "YOUR_API_KEY";
+
+    document.getElementById("gen-color-hex").value = color;
+
+    const code = `&lt;!-- ShopBot Widget --&gt;
+&lt;script
+  src="${apiUrl}/static/shopbot-widget.js"
+  data-api-url="${apiUrl}"
+  data-api-key="${apiKey}"
+  data-client-id="${clientId}"
+  data-primary-color="${color}"
+  data-bot-name="${botName}"
+  data-welcome-message="${welcome}"
+&gt;&lt;/script&gt;`;
+
+    document.getElementById("embedCode").innerHTML = code;
+  }
+
+  function syncColor() {
+    const hexInput = document.getElementById("gen-color-hex").value;
+    if (/^#[0-9A-Fa-f]{6}$/.test(hexInput)) {
+      document.getElementById("gen-color").value = hexInput;
+      updateEmbedCode();
+    }
+  }
+
+  function copyEmbedCode() {
+    // Get raw text (without HTML entities)
+    const rawText = document.getElementById("embedCode").innerHTML
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">");
+    navigator.clipboard.writeText(rawText).then(() => {
+      const btn = document.querySelector(".copy-btn");
+      btn.textContent = "Copied!";
+      setTimeout(() => btn.textContent = "Copy", 2000);
+    });
+  }
+
+  // ============================================================
+  // Initialize on page load
+  // ============================================================
+  renderTable();
+  renderChart();
+  updateEmbedCode();
+
+  // Also update embed code when API URL changes
+  document.getElementById("apiUrl").addEventListener("input", updateEmbedCode);
+  document.getElementById("apiKey").addEventListener("input", updateEmbedCode);
+</script>
+
+</body>
+</html>
